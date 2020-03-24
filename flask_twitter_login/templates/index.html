@@ -1,0 +1,19 @@
+<!doctype html>
+<html>
+<head>
+
+</head>
+<body>
+{% block body %}
+<h2>Flask Login App</h2>
+{% if session['screen_name'] %}
+Hello {{ session['screen_name'] }}!
+{% else %}
+<h3>Twitter Signin: </h3>
+<a href="{{ url_for('login') }}">
+    <img src="https://pbs.twimg.com/profile_images/1111729635610382336/_65QFl7B_400x400.png"
+         alt="sign in" height="42" width="42">
+</a>
+{% endif %}
+{% endblock %}
+</body>
