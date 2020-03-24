@@ -1,11 +1,13 @@
 import os
 import tweepy
 import pandas as pd
+from dotenv import load_dotenv
 import json
 
 
 class TwitterApp:
-    def __init__(self, access_token, access_token_secret, consumer_key, consumer_key_secret):
+    def __init__(self, access_token, access_token_secret,
+                 consumer_key, consumer_key_secret):
         self.access_token = access_token
         self.access_token_secret = access_token_secret
         self.consumer_key = consumer_key
@@ -41,8 +43,10 @@ class TwitterApp:
                 tweets = []
                 tweets_attributes = ['id_str', 'created_at', 'text', 'author',
                                      'user', 'place', 'source', 'source_url',
-                                     'in_reply_to_user_id_str', 'in_reply_to_screen_name',
-                                     'retweeted_status', 'retweet_count', 'favorite_count']
+                                     'in_reply_to_user_id_str',
+                                     'in_reply_to_screen_name',
+                                     'retweeted_status',
+                                     'retweet_count', 'favorite_count']
                 for tweet in self.api.search(q=search_term, lang='en', rpp=5):
                     tweets.append(tweet)
                     # print(f"{tweet.user.name}:{tweet.text}")
@@ -60,18 +64,25 @@ class TwitterApp:
 
 
 # Main
-ACCESS_TOKEN = os.getenv('TWITTER_ACCESS_TOKEN')
-ACCESS_TOKEN_SECRET = os.getenv('TWITTER_ACCESS_TOKEN_SECRET')
-CONSUMER_KEY = os.getenv('TWITTER_CONSUMER_TOKEN')
-CONSUMER_SECRET = os.getenv('TWITTER_CONSUMER_SECRET_KEY')
+env_file = os.path.abspath(os.path.join(
+    os.path.dirname(__file__), '..', '.env'))
+load_dotenv(env_file)
 
-dir = os.path.abspath(os.path.join(os.path.dirname(__file__), '..', 'datafiles'))
+ACCESS_TOKEN = os.environ.get('TWITTER_ACCESS_TOKEN')
+ACCESS_TOKEN_SECRET = os.environ.get('TWITTER_ACCESS_TOKEN_SECRET')
+CONSUMER_KEY = os.environ.get('TWITTER_CONSUMER_TOKEN')
+CONSUMER_SECRET = os.environ.get('TWITTER_CONSUMER_SECRET_KEY')
+
+dir = os.path.abspath(os.path.join(
+    os.path.dirname(__file__), '..', 'datafiles'))
 image_dir = os.path.join(dir, 'images')
 image_path = os.path.join(image_dir, 'viper.jpg')
 output_dir = os.path.join(dir, 'output')
 output_path = os.path.join(output_dir, 'tweets.json')
 
-twpy = TwitterApp(ACCESS_TOKEN, ACCESS_TOKEN_SECRET, CONSUMER_KEY, CONSUMER_SECRET)
+twpy = TwitterApp(ACCESS_TOKEN, ACCESS_TOKEN_SECRET,
+                  CONSUMER_KEY, CONSUMER_SECRET)
 twpy.post_tweet('Python is awesome!')
 twpy.post_tweet_with_media(image_path, 'Eyelash vipers are pretty cool!')
 twpy.get_search_tweets('volunteers', output_path)
+print('Success')

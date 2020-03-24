@@ -1,6 +1,9 @@
-#app files
+#virtualenv
 .idea
 .env
+Lib/
+Scripts/
+pyvenv.cfg
 
 # Byte-compiled / optimized / DLL files
 __pycache__/
